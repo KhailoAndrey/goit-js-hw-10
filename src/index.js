@@ -9,30 +9,35 @@ const searchInput = document.querySelector('#search-box');
 const countryList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('country-info');
 
-function createCountryList() {
-  countryList.style.listStyle = 'none';
-  countryList.style.paddingLeft = 0;
+function createCountryList(name) {
   const countryItem = document.createElement('li');
+  countryItem.classList.add('country-item');
   const flagImage = document.createElement('img');
+  flagImage.classList.add('imageflag');
   const countryName = document.createElement('p');
-  countryName.textcontent = "I am country";
+  countryName.textContent = `&{name}`;
   flagImage.setAttribute('src', 'https://flagcdn.com/se.svg');
-  flagImage.style.width = '5%';
   countryItem.append(flagImage, countryName);
   countryList.append(countryItem);
 }
 
 createCountryList();
+createCountryList();
+createCountryList();
+createCountryList();
 
 searchInput.addEventListener('input', () => {
   const findText = searchInput.value.trim();
-  console.log(findText);
+  // console.log(findText);
   if (findText.length < 2) {
     alertShortText();
   }
   fetchCountries(findText)
-    .then(() => {
+    .then(response => {
+      const parsedArrayCounries = response;
+      console.log(parsedArrayCounries);
       // alertShortText();
+
       // Data handling
       Notiflix.Notify.failure('Тут надо обработать массив объекта');
     })
