@@ -9,34 +9,40 @@ const searchInput = document.querySelector('#search-box');
 const countryList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('country-info');
 
-function createCountryList(name) {
+function createCountryList({ name, flag }) {
   const countryItem = document.createElement('li');
   countryItem.classList.add('country-item');
   const flagImage = document.createElement('img');
   flagImage.classList.add('imageflag');
   const countryName = document.createElement('p');
   countryName.textContent = `${name}`;
-  flagImage.setAttribute('src', 'https://flagcdn.com/se.svg');
+  flagImage.setAttribute('src', `${flag}`);
   countryItem.append(flagImage, countryName);
   countryList.append(countryItem);
 }
 
-createCountryList();
-createCountryList();
-createCountryList();
-createCountryList();
-
 searchInput.addEventListener('input', () => {
   const findText = searchInput.value.trim();
+  countryList.replaceChildren();
   // console.log(findText);
-  if (findText.length < 2) {
-    alertShortText();
-  }
   fetchCountries(findText)
     .then(response => {
-      const parsedArrayCounries = response.map(arrItem => arrItem.name.common);
-      console.log(parsedArrayCounries);
-      createCountryList(parsedArrayCounries);
+      if (response.length > 10) {
+        alertShortText();
+        countryList.replaceChildren();
+        return;
+      }
+      console.log(response);
+
+      // const parsedArrayCounriesName = response.map(
+      //   arrItem => arrItem.name.common
+      // );
+      // const parsedArrayCountryFlag = response.map(arrItem => arrItem.flag.svg);
+      console.log(parsedArrayCounriesName);
+      // console.log(parsedArrayCountryFlag);
+      for (const country of response) {
+        createCountryList({ country.name.common, country.flag.svg });
+      }
 
       // alertShortText();
 
