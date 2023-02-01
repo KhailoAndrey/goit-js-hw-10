@@ -33,18 +33,13 @@ searchInput.addEventListener('input', () => {
         return;
       }
       console.log(response);
-
-      // const parsedArrayCounriesName = response.map(
-      //   arrItem => arrItem.name.common
-      // );
-      // const parsedArrayCountryFlag = response.map(arrItem => arrItem.flag.svg);
-      console.log(parsedArrayCounriesName);
-      // console.log(parsedArrayCountryFlag);
       for (const country of response) {
-        createCountryList({ country.name.common, country.flag.svg });
+        const name = country.name.common;
+        console.log(name);
+        const flag = country.flags.svg;
+        console.log(flag);
+        createCountryList({ name, flag });
       }
-
-      // alertShortText();
 
       // Data handling
       Notiflix.Notify.failure('Тут надо обработать массив объекта');
