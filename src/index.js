@@ -15,7 +15,7 @@ function createCountryList(name) {
   const flagImage = document.createElement('img');
   flagImage.classList.add('imageflag');
   const countryName = document.createElement('p');
-  countryName.textContent = `&{name}`;
+  countryName.textContent = `${name}`;
   flagImage.setAttribute('src', 'https://flagcdn.com/se.svg');
   countryItem.append(flagImage, countryName);
   countryList.append(countryItem);
@@ -34,8 +34,10 @@ searchInput.addEventListener('input', () => {
   }
   fetchCountries(findText)
     .then(response => {
-      const parsedArrayCounries = response;
+      const parsedArrayCounries = response.map(arrItem => arrItem.name.common);
       console.log(parsedArrayCounries);
+      createCountryList(parsedArrayCounries);
+
       // alertShortText();
 
       // Data handling
