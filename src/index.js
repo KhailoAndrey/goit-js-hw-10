@@ -21,24 +21,66 @@ function createCountryList({ name, flag }) {
   countryList.append(countryItem);
 }
 
+function createCountryCard({ name, capital, population, flag, languages }) {
+  // createCountryList({ name, flag });
+  const countryCapital = document.createElement('p');
+  countryCapital.textContent = `Capital: ${capital}`;
+  const countryPopulation = document.createElement('p');
+  countryPopulation.textContent = `Population: ${population}`;
+  const countryLanguage = document.createElement('p');
+  countryLanguage.textContent = `Languages: ${languages}`;
+  countryCapital.classList.add('country-item');
+  countryPopulation.classList.add('country-item');
+  countryLanguage.classList.add('country-item');
+  countryList.append(countryCapital, countryPopulation, countryLanguage);
+}
+
+// function getDataFromResponse(country) {
+//   // for (const country of response) {
+//     const name = country.name.common;
+//     const flag = country.flags.svg;
+//     const capital = response[0].capital.join();
+//     const population = response[0].population;
+//     const languages = Object.values(response[0].languages).join(', ');
+//   return { name, flag, capital, population, languages };
+//   // }
+// }
+
 searchInput.addEventListener('input', () => {
   const findText = searchInput.value.trim();
   countryList.replaceChildren();
-  // console.log(findText);
   fetchCountries(findText)
     .then(response => {
       if (response.length > 10) {
         alertShortText();
         countryList.replaceChildren();
         return;
-      }
-      console.log(response);
-      for (const country of response) {
-        const name = country.name.common;
-        console.log(name);
-        const flag = country.flags.svg;
-        console.log(flag);
-        createCountryList({ name, flag });
+      } else if (response.length > 1) {
+        console.log(response);
+        for (const country of response) {
+          // getDataFromResponse(country);
+          const name = country.name.common;
+          console.log(name);
+          const flag = country.flags.svg;
+          console.log(flag);
+          createCountryList({ name, flag });
+        }
+      } else {
+        countryList.replaceChildren();
+
+        console.log(response);
+        for (const country of response) {
+          const name = country.name.common;
+          console.log(name);
+          const flag = country.flags.svg;
+          console.log(flag);
+          createCountryList({ name, flag });
+        }
+        const capital = response[0].capital.join();
+        const population = response[0].population;
+        const languages = Object.values(response[0].languages).join(', ');
+        console.log(capital, population, languages);
+        createCountryCard({ capital, population, languages });
       }
 
       // Data handling
