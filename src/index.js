@@ -61,6 +61,10 @@ searchInput.addEventListener(
   'input',
   debounce(() => {
     const findText = searchInput.value.trim();
+    if (findText === '') {
+      countryList.replaceChildren();
+      return;
+    }
     countryList.replaceChildren();
     fetchCountries(findText)
       .then(response => {
