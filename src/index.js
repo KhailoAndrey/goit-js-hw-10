@@ -53,7 +53,7 @@ function getDataFromResponse(response) {
     languages = Object.values(response[0].languages).join(', ');
     responseArray.push({ name, flag, capital, population, languages });
   }
-  console.log('responseArray', responseArray);
+  // console.log('responseArray', responseArray);
   return responseArray;
 }
 
