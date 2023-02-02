@@ -57,56 +57,43 @@ function getDataFromResponse(response) {
   return responseArray;
 }
 
-searchInput.addEventListener('input', () => {
-  const findText = searchInput.value.trim();
-  countryList.replaceChildren();
-  fetchCountries(findText)
-    .then(response => {
-      if (response.length > 10) {
-        alertShortText();
-        countryList.replaceChildren();
-        return;
-      } else if (response.length > 1) {
-        countryList.replaceChildren();
-
-        getDataFromResponse(response);
-        for (const { name, flag } of responseArray) {
-          createCountryList({ name, flag });
+searchInput.addEventListener(
+  'input',
+  debounce(() => {
+    const findText = searchInput.value.trim();
+    countryList.replaceChildren();
+    fetchCountries(findText)
+      .then(response => {
+        if (response.length > 10) {
+          alertShortText();
+          countryList.replaceChildren();
+          return;
+        } else if (response.length > 1) {
+          countryList.replaceChildren();
+          getDataFromResponse(response);
+          for (const { name, flag } of responseArray) {
+            createCountryList({ name, flag });
+          }
+        } else {
+          countryList.replaceChildren();
+          getDataFromResponse(response);
+          for (const {
+            name,
+            capital,
+            population,
+            flag,
+            languages,
+          } of responseArray) {
+            createCountryCard({ name, capital, population, flag, languages });
+          }
         }
-
-        // console.log(response);
-        // for (const country of response) {
-        //   const name = country.name.common;
-        //   console.log(name);
-        //   const flag = country.flags.svg;
-        //   console.log(flag);
-        //   createCountryList({ name, flag });
-        // }
-      } else {
-        countryList.replaceChildren();
-        console.log(response);
-        for (const country of response) {
-          const name = country.name.common;
-          console.log(name);
-          const flag = country.flags.svg;
-          console.log(flag);
-          const capital = response[0].capital.join();
-          const population = response[0].population;
-          const languages = Object.values(response[0].languages).join(', ');
-          console.log(capital, population, languages);
-          createCountryCard({ name, capital, population, flag, languages });
-        }
-      }
-
-      // Data handling
-      Notiflix.Notify.failure('Тут надо обработать массив объекта');
-    })
-
-    .catch(error => {
-      console.log(error);
-      Notiflix.Notify.failure('Oops, there is no country with that name');
-    });
-});
+      })
+      .catch(error => {
+        console.log(error);
+        Notiflix.Notify.failure('Oops, there is no country with that name');
+      });
+  }, 300)
+);
 
 function alertShortText() {
   Notiflix.Notify.info(
