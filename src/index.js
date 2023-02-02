@@ -9,6 +9,13 @@ const searchInput = document.querySelector('#search-box');
 const countryList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('country-info');
 
+let responseArray = [];
+let name = null;
+let flag = null;
+let capital = null;
+let population = null;
+let languages = null;
+
 function createCountryList({ name, flag }) {
   const countryItem = document.createElement('li');
   countryItem.classList.add('country-item');
@@ -23,8 +30,8 @@ function createCountryList({ name, flag }) {
 
 function createCountryCard({ name, capital, population, flag, languages }) {
   createCountryList({ name, flag });
-  // countryName.classList.add('country-name');
   const countryCapital = document.createElement('p');
+  countryCapital.classList.add('country-name');
   countryCapital.textContent = `Capital: ${capital}`;
   const countryPopulation = document.createElement('p');
   countryPopulation.textContent = `Population: ${population}`;
@@ -37,13 +44,13 @@ function createCountryCard({ name, capital, population, flag, languages }) {
 }
 
 function getDataFromResponse(response) {
-  const responseArray = [];
+  responseArray = [];
   for (const country of response) {
-    const name = country.name.common;
-    const flag = country.flags.svg;
-    const capital = response[0].capital.join();
-    const population = response[0].population;
-    const languages = Object.values(response[0].languages).join(', ');
+    name = country.name.common;
+    flag = country.flags.svg;
+    capital = response[0].capital.join();
+    population = response[0].population;
+    languages = Object.values(response[0].languages).join(', ');
     responseArray.push({ name, flag, capital, population, languages });
   }
   console.log('responseArray', responseArray);
@@ -60,16 +67,21 @@ searchInput.addEventListener('input', () => {
         countryList.replaceChildren();
         return;
       } else if (response.length > 1) {
-        getDataFromResponse(response);
+        countryList.replaceChildren();
 
-        console.log(response);
-        for (const country of response) {
-          const name = country.name.common;
-          console.log(name);
-          const flag = country.flags.svg;
-          console.log(flag);
+        getDataFromResponse(response);
+        for (const { name, flag } of responseArray) {
           createCountryList({ name, flag });
         }
+
+        // console.log(response);
+        // for (const country of response) {
+        //   const name = country.name.common;
+        //   console.log(name);
+        //   const flag = country.flags.svg;
+        //   console.log(flag);
+        //   createCountryList({ name, flag });
+        // }
       } else {
         countryList.replaceChildren();
         console.log(response);
